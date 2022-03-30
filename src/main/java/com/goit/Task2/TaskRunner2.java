@@ -1,6 +1,6 @@
 package com.goit.Task2;
 
-/**
+/*
  Дан текстовый файл file.txt, необходимо считать файл в список объектов User и создать новый файл user.json.
  Предполагаем, что каждая строка содержит одинаковое количество "колонок", разделенный пробелом.
  Пример:
@@ -32,24 +32,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskRunner2 {
-    private static File inputFile = new File("src/main/java/com/goit/txt/Task2/file.txt");
-    private static File resultFile = new File("src/main/java/com/goit/Task2/user.json");
+    private static final File inputFile = new File("src/main/java/com/goit/txt/Task2/file.txt");
+    private static final File resultFile = new File("src/main/java/com/goit/Task2/user.json");
 
 
     public static void main(String[] args) {
-        List<String> personsStringList = new ArrayList<>();
-        personsStringList = personReader(inputFile);
+        List<String> personsStringList;
+        personsStringList = personReader();
         List<User> personsList= personMaker(personsStringList);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(personsList);
-        fileWriter(resultFile, json);
+        fileWriter(json);
     }
 
-    private static List<String> personReader(File file) {
+    private static List<String> personReader() {
         List<String> persons = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader((new FileReader(file)))) {
+        try (BufferedReader bufferedReader = new BufferedReader((new FileReader(TaskRunner2.inputFile)))) {
             persons.add(bufferedReader.readLine());
-            String number = new String();
+            String number;
             while ((number = bufferedReader.readLine()) != null) {
                 persons.add(number);
             }
@@ -69,17 +69,17 @@ public class TaskRunner2 {
         return personsList;
     }
 
-    private static void fileWriter (File file, String string) {
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
+    private static void fileWriter(String string) {
+        if (!TaskRunner2.resultFile.exists()) {
+            TaskRunner2.resultFile.getParentFile().mkdirs();
             try {
-                file.createNewFile();
+                TaskRunner2.resultFile.createNewFile();
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
         }
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(TaskRunner2.resultFile))) {
             bufferedWriter.write(string);
         } catch (IOException e) {
             System.err.println(e.getMessage());

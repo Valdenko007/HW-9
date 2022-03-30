@@ -1,5 +1,5 @@
 package com.goit.Task1;
-/**
+/*
 
  Дан текстовый файл file.txt, который содержит список номеров телефоном (один на линии). Необъодимо написать метод, который будет считывать файл и выводить в консоль все валидные номера телефонов.
  Предполагаем, что "валидный" номер телефона - это строка в одном из двух форматов: (xxx) xxx-xxxx или xxx-xxx-xxxx (х обозначает цифру).
@@ -27,21 +27,18 @@ public class TaskRunner1 {
     public static void main(String[] args) {
         try(FileReader reader = new FileReader("src/main/java/com/goit/txt/Task1/file.txt")) {
             int c;
-            String data = "";
+            StringBuilder data = new StringBuilder();
+            String regex1 = "\\d{3}[-.]?\\d{3}[-.]?\\d{4}";
+            String regex2 = "[(.]\\d{3}[).]\\s\\d{3}[-.]\\d{4}";
 
             while((c =reader.read())!=-1){
-                data += String.valueOf((char) c);
+                data.append((char) c);
             }
-            String[] inputData = data.split("\\n");
+            String[] inputData = data.toString().split("\\n");
 
-            for(int i = 0; i < inputData.length; i++){
-                String string = inputData[i].strip();
-                String regex1 = "\\d{3}[-.]?\\d{3}[-.]?\\d{4}";
-                String regex2 = "[(.]\\d{3}[).]\\s\\d{3}[-.]\\d{4}";
-                if (string.matches(regex1)) {
-                    System.out.println(string);
-                }
-                if (string.matches(regex2)) {
+            for (String inputDatum : inputData) {
+                String string = inputDatum.strip();
+                if (string.matches(regex1) || string.matches(regex2)) {
                     System.out.println(string);
                 }
             }
